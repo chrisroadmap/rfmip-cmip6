@@ -1,0 +1,14 @@
+name: rfmip-cmip6
+channels:
+  - conda-forge
+  - nodefaults
+dependencies:
+  - python==3.11
+  - iris
+  - jupyter
+  - jupytext
+  - matplotlib
+  - netCDF4
+  - numpy
+  - pandas
+  - tqdm
