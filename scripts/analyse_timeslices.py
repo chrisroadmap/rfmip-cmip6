@@ -10,6 +10,7 @@ import numpy as np
 with open('../output/timeslice.pkl', 'rb') as handle:
     rfmip_data = pickle.load(handle)
 
+pl.style.use("../defaults.mplstyle")
 
 # don't forget to exclude first few years
 # regardless of experiment, just take the last 15
@@ -50,22 +51,35 @@ del rfmip_tier1_means["4xCO2"]["GISS-E2-1-G"]
 del rfmip_tier1_means["aer"]["GISS-E2-1-G"]
 
 
-print(rfmip_tier1_means)
-
-
-
 expt_means = {}
 for experiment in experiments:
     expt_means[experiment] = {}
     for model in rfmip_tier1_means[experiment]:
-        print(experiment, model)
         n_runs = len(rfmip_tier1_means[experiment][model])
         if n_runs > 0:
-            expt_means[experiment][model] = np.zeros((n_runs))
+            expt_means[experiment][model] = np.ones((n_runs)) * np.nan
             for irun, runid in enumerate(rfmip_tier1_means[experiment][model]):
                 expt_means[experiment][model][irun] = rfmip_tier1_means[experiment][model][runid]
             expt_means[experiment][model] = np.mean(expt_means[experiment][model])
 
-print(expt_means)
+
+fig, ax = pl.subplots(1, 1, figsize=(9/2.54, 9/2.54))
+
+for iexp, experiment in enumerate(experiments):
+    data = np.array(list(expt_means[experiment].values()))
+    # 1.4x CO2 for easy comparison - use 0.2266 from Smith et al. 2020
+    label = experiment
+    if experiment == "4xCO2":
+        data = data * 0.2266
+        label = "1.4xCO2"
+    ax.scatter(np.ones_like(data) * iexp, data)
+    ax.text(iexp, -1.8, label, ha="center", va="bottom")
+ax.grid(axis='y')
+ax.axes.get_xaxis().set_visible(False)
+ax.set_ylabel("W m$^{-2}$")
+ax.set_xlim(-0.5, 4.5)
+fig.tight_layout()
 
 os.makedirs('../plots', exist_ok=True)
+pl.savefig("../plots/rfmip_tier1.png")
+pl.savefig("../plots/rfmip_tier1.pdf")
