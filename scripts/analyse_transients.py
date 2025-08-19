@@ -92,8 +92,6 @@ for iexp, experiment in enumerate(experiments):
 ax[0,1].legend(frameon=False, fontsize=5.5)
 fig.tight_layout()
 
-pl.show()
-
 os.makedirs('../plots', exist_ok=True)
 pl.savefig("../plots/rfmip_tier2.png")
 pl.savefig("../plots/rfmip_tier2.pdf")
