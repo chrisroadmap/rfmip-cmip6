@@ -71,7 +71,7 @@ for iexp, experiment in enumerate(experiments):
     label = experiment
     if experiment == "4xCO2":
         data = data * 0.2266
-        label = "1.4xCO2"
+        label = "CO2"
     ax.scatter(np.ones_like(data) * iexp, data, color="#808080")
     ax.text(iexp, -1.8, label, ha="center", va="bottom")
 ax.grid(axis='y')
